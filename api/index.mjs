@@ -4,7 +4,11 @@ globalThis.invocations ??= 0
 
 const born = new Date().toISOString()
 
-export default async () => new Response(JSON.stringify({
+const {VERCEL_REGION: region} = process.env
+
+export default async ({headers}) => new Response(JSON.stringify({
+    born,
+    region,
     invocations: globalThis.invocations += 1,
-    born
+    ip: headers.get("x-real-ip")
 }))
